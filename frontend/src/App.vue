@@ -1,190 +1,306 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useLocale } from './composables/useLocale.js'
+import HeroSection from './sections/HeroSection.vue'
+import AboutSection from './sections/AboutSection.vue'
+import ExperienceSection from './sections/ExperienceSection.vue'
+import SkillsSection from './sections/SkillsSection.vue'
+import EducationSection from './sections/EducationSection.vue'
+import ContactSection from './sections/ContactSection.vue'
+
+const { t, locale, setLocale } = useLocale()
+
+const activeSection = ref('hero')
+const navOpen = ref(false)
+
+const navLinks = ['about', 'experience', 'skills', 'education', 'contact']
+
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  navOpen.value = false
+}
+
+function toggleLocale() {
+  setLocale(locale.value === 'en' ? 'pt' : 'en')
+}
+
+let observers = []
+
+onMounted(() => {
+  const sections = ['hero', ...navLinks]
+  sections.forEach((id) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) activeSection.value = id
+      },
+      { threshold: 0.25 }
+    )
+    obs.observe(el)
+    observers.push(obs)
+  })
+})
+
+onUnmounted(() => {
+  observers.forEach((o) => o.disconnect())
+})
 </script>
 
 <template>
-  <div class="layout">
-    <header>
-      <span class="logo">Portfolio</span>
-      <nav>
-        <RouterLink to="/contact">Contact</RouterLink>
-        <RouterLink to="/budget">Budget</RouterLink>
-        <RouterLink to="/schedule">Schedule</RouterLink>
-      </nav>
+  <div class="app">
+    <!-- Sticky nav -->
+    <header class="nav">
+      <div class="nav-inner">
+        <button class="nav-logo" @click="scrollTo('hero')">HD</button>
+
+        <nav class="nav-links" :class="{ open: navOpen }">
+          <button
+            v-for="link in navLinks"
+            :key="link"
+            class="nav-link"
+            :class="{ active: activeSection === link }"
+            @click="scrollTo(link)"
+          >
+            {{ t(`nav.${link}`) }}
+          </button>
+        </nav>
+
+        <div class="nav-right">
+          <button class="locale-toggle" @click="toggleLocale">
+            <span :class="{ 'locale-active': locale === 'en' }">EN</span>
+            <span class="locale-sep">|</span>
+            <span :class="{ 'locale-active': locale === 'pt' }">PT</span>
+          </button>
+          <button class="hamburger" @click="navOpen = !navOpen" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
     </header>
 
     <main>
-      <RouterView />
+      <HeroSection />
+      <AboutSection />
+      <ExperienceSection />
+      <SkillsSection />
+      <EducationSection />
+      <ContactSection />
     </main>
+
+    <footer class="site-footer">
+      <p>Henrique Dias de Carvalho Jr · Curitiba, Brazil · henriquediasjr@gmail.com</p>
+    </footer>
   </div>
 </template>
 
 <style>
-/* ── Global reset & tokens ── */
+/* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Design tokens ── */
 :root {
-  --color-bg: #f8f9fa;
-  --color-surface: #ffffff;
-  --color-text: #1a1a2e;
-  --color-muted: #6b7280;
-  --color-accent: #2563eb;
-  --color-border: #e5e7eb;
-  --color-success: #16a34a;
-  --color-error: #dc2626;
-  --radius: 8px;
-  --shadow: 0 1px 4px rgba(0,0,0,.08);
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface2: #263348;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --border: #334155;
+  --success: #22c55e;
+  --error: #ef4444;
+  --radius: 10px;
+  --max-w: 900px;
 }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   line-height: 1.6;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ── Layout ── */
-.layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+/* ── Nav ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
 }
 
-header {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  padding: 0 2rem;
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 1.5rem;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: var(--shadow);
+  gap: 1rem;
 }
 
-.logo {
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: -.5px;
-  color: var(--color-accent);
+.nav-logo {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: -0.5px;
+  padding: 0;
+  flex-shrink: 0;
 }
 
-nav {
+.nav-links {
   display: flex;
+  align-items: center;
   gap: 0.25rem;
 }
 
-nav a {
-  padding: 0.4rem 0.875rem;
-  border-radius: var(--radius);
-  color: var(--color-muted);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: background 0.15s, color 0.15s;
-}
-
-nav a:hover { background: var(--color-bg); color: var(--color-text); }
-nav a.router-link-active { background: #eff6ff; color: var(--color-accent); }
-
-main {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: 3rem 1rem;
-}
-
-/* ── Card / Section ── */
-section {
-  background: var(--color-surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  border: 1px solid var(--color-border);
-  padding: 2.5rem;
-  width: 100%;
-  max-width: 560px;
-  height: fit-content;
-}
-
-h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-}
-
-.subtitle {
-  color: var(--color-muted);
-  margin-bottom: 2rem;
-  font-size: 0.95rem;
-}
-
-/* ── Form ── */
-form { display: flex; flex-direction: column; gap: 1.25rem; }
-
-.field { display: flex; flex-direction: column; gap: 0.375rem; }
-
-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-input, select, textarea {
-  padding: 0.6rem 0.875rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  font-size: 0.95rem;
-  font-family: inherit;
-  background: var(--color-bg);
-  color: var(--color-text);
-  transition: border-color 0.15s, box-shadow 0.15s;
-  outline: none;
-  width: 100%;
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
-}
-
-textarea { resize: vertical; }
-
-button[type="submit"] {
-  padding: 0.7rem 1.5rem;
-  background: var(--color-accent);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.95rem;
+.nav-link {
+  background: none;
   border: none;
-  border-radius: var(--radius);
+  color: var(--muted);
   cursor: pointer;
-  transition: opacity 0.15s;
-  align-self: flex-start;
-}
-
-button[type="submit"]:hover:not(:disabled) { opacity: 0.88; }
-button[type="submit"]:disabled { opacity: 0.55; cursor: not-allowed; }
-
-/* ── Feedback ── */
-.feedback {
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
 }
 
-.feedback.success {
-  background: #f0fdf4;
-  color: var(--color-success);
-  border: 1px solid #bbf7d0;
+.nav-link:hover {
+  color: var(--text);
+  background: var(--surface);
 }
 
-.feedback.error {
-  background: #fef2f2;
-  color: var(--color-error);
-  border: 1px solid #fecaca;
+.nav-link.active {
+  color: var(--accent);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.locale-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  letter-spacing: 0.05em;
+  transition: border-color 0.15s;
+}
+
+.locale-toggle:hover {
+  border-color: var(--accent);
+}
+
+.locale-sep {
+  opacity: 0.4;
+}
+
+.locale-active {
+  color: var(--accent);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--muted);
+  border-radius: 2px;
+}
+
+/* ── Main sections ── */
+main section {
+  padding: 5rem 1.5rem;
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+}
+
+/* ── Shared card ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+}
+
+/* ── Footer ── */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* ── Mobile nav ── */
+@media (max-width: 640px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.25rem;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 0.6rem 1rem;
+  }
 }
 </style>
