@@ -1,5 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useLocale } from '../composables/useLocale'
+
+const { t } = useLocale()
 
 // ── Calendar state ──────────────────────────────────────────────────────────
 const today     = new Date()
@@ -18,15 +21,21 @@ const msgMessage = ref('')
 const msgSent    = ref(false)
 
 // ── Constants ────────────────────────────────────────────────────────────────
-const MONTH_NAMES = [
-  'January','February','March','April','May','June',
-  'July','August','September','October','November','December',
-]
 const DAY_NAMES = ['Mo','Tu','We','Th','Fr','Sa','Su']
 const TIME_SLOTS = ['09:00','10:00','11:00','14:00','15:00','16:00']
 
 // ── Calendar computed ────────────────────────────────────────────────────────
-const monthLabel = computed(() => `${MONTH_NAMES[calMonth.value]} ${calYear.value}`)
+const monthNames = computed(() => {
+  const locale = t('nav.experience') // Use locale detection
+  // For EN, use English months; for PT, use Portuguese
+  const map = {
+    'Experience': ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    'Experiência': ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+  }
+  return map[locale] || map['Experience']
+})
+
+const monthLabel = computed(() => `${monthNames.value[calMonth.value]} ${calYear.value}`)
 
 const daysInMonth = computed(() =>
   new Date(calYear.value, calMonth.value + 1, 0).getDate()
@@ -114,14 +123,14 @@ async function sendMessage() {
 <template>
   <section id="contact">
     <div class="section-wrap">
-      <div class="section-label" data-animate style="--i:0">Let's Build Something</div>
+      <div class="section-label" data-animate style="--i:0">{{ t('contact.title') }}</div>
 
       <div class="contact-grid">
 
         <!-- LEFT: Calendar booking -->
         <div class="contact-col" data-animate style="--i:1">
-          <h2 class="col-heading">Book a 15-min call</h2>
-          <p class="col-sub">No commitment — just a quick technical introduction.</p>
+          <h2 class="col-heading">{{ t('contact.scheduleTitle') }}</h2>
+          <p class="col-sub">{{ t('contact.subtitle') }}</p>
 
           <div class="calendar">
             <!-- Header -->
@@ -171,11 +180,11 @@ async function sendMessage() {
             <!-- Booking inputs -->
             <div v-if="selDay && selSlot" class="booking-inputs">
               <div class="field-row">
-                <input v-model="bookName"  class="c-input" placeholder="Your name" />
-                <input v-model="bookEmail" class="c-input" type="email" placeholder="your@email.com" />
+                <input v-model="bookName"  class="c-input" :placeholder="t('contact.form.namePlaceholder')" />
+                <input v-model="bookEmail" class="c-input" type="email" :placeholder="t('contact.form.emailPlaceholder')" />
               </div>
               <button class="btn-primary btn-full" @click="confirmBooking" data-action="book-calendar">
-                Confirm Booking
+                {{ t('contact.scheduleBtn') || 'Confirm' }}
               </button>
             </div>
           </div>
@@ -183,48 +192,42 @@ async function sendMessage() {
 
         <!-- RIGHT: Message form -->
         <div class="contact-col" data-animate style="--i:2">
-          <h2 class="col-heading">Send a message</h2>
-          <p class="col-sub">Prefer async? Fill this in and I'll reply within 24h.</p>
+          <h2 class="col-heading">{{ t('contact.formTitle') }}</h2>
+          <p class="col-sub">{{ t('contact.microcopy') }}</p>
 
           <div v-if="msgSent" class="sent-msg">
-            Message sent — I'll get back to you shortly.
+            {{ t('contact.form.success') }}
           </div>
 
           <form v-else class="msg-form" @submit.prevent="sendMessage">
             <div class="field-row">
               <div class="field">
-                <label class="field-label">Name</label>
-                <input v-model="msgName" class="c-input" placeholder="Your name" required />
+                <label class="field-label">{{ t('contact.form.name') }}</label>
+                <input v-model="msgName" class="c-input" :placeholder="t('contact.form.namePlaceholder')" required />
               </div>
               <div class="field">
-                <label class="field-label">Email</label>
-                <input v-model="msgEmail" class="c-input" type="email" placeholder="your@email.com" required />
+                <label class="field-label">{{ t('contact.form.email') }}</label>
+                <input v-model="msgEmail" class="c-input" type="email" :placeholder="t('contact.form.emailPlaceholder')" required />
               </div>
             </div>
 
             <div class="field">
-              <label class="field-label">What do you need?</label>
-              <select v-model="msgNeed" class="c-input c-select">
-                <option value="">Select an option</option>
-                <option value="pipeline">Build a data pipeline</option>
-                <option value="architecture">Review my architecture</option>
-                <option value="hire">Hire me as backend engineer</option>
-                <option value="other">Other</option>
-              </select>
+              <label class="field-label">{{ t('contact.form.need') }}</label>
+              <input v-model="msgNeed" class="c-input" type="text" :placeholder="t('contact.form.needPlaceholder')" />
             </div>
 
             <div class="field">
-              <label class="field-label">Message</label>
+              <label class="field-label">{{ t('contact.form.message') }}</label>
               <textarea
                 v-model="msgMessage"
                 class="c-input c-textarea"
                 rows="5"
-                placeholder="Tell me about your project..."
+                :placeholder="t('contact.form.messagePlaceholder')"
                 required
               ></textarea>
             </div>
 
-            <button type="submit" class="btn-ghost btn-full">Send Message</button>
+            <button type="submit" class="btn-ghost btn-full">{{ t('contact.form.submit') }}</button>
           </form>
         </div>
 

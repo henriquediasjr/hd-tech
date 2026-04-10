@@ -16,8 +16,8 @@ export default {
   socialProof: {
     items: [
       { value: '20M+', label: 'Registros por execução' },
-      { value: '~0',   label: 'Ops manuais restantes' },
-      { value: '3+',   label: 'Anos em fintech prod' },
+      { value: '~0', label: 'Ops manuais restantes' },
+      { value: '3+', label: 'Anos em fintech prod' },
       { value: '150%', label: 'Crescimento de tráfego' },
     ],
   },
@@ -28,21 +28,25 @@ export default {
         icon: 'server',
         title: 'Sistemas Backend Escaláveis',
         desc: 'Design e construção de microsserviços Python que lidam com dados de alto volume de forma confiável.',
+        iconPath: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
       },
       {
         icon: 'database',
         title: 'Pipelines de Dados em Larga Escala',
         desc: 'Processamento de milhões de registros eficientemente com DuckDB, Parquet, S3 e padrões assíncronos.',
+        iconPath: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>',
       },
       {
         icon: 'network',
         title: 'Arquitetura de Microsserviços',
         desc: 'Design de sistemas orientados a eventos com RabbitMQ, REST APIs e AWS ECS com observabilidade.',
+        iconPath: '<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/>',
       },
       {
         icon: 'automation',
         title: 'Automação de Processos',
         desc: 'Substituição de operações manuais por automações estruturadas e confiáveis que eliminam erros humanos.',
+        iconPath: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
       },
     ],
   },
@@ -103,12 +107,12 @@ export default {
   skills: {
     title: 'Tech Stack',
     categories: [
-      { name: 'Backend',        items: ['Python', 'FastAPI', 'Django', 'PHP', 'Laravel', 'Symfony', 'Node.js'] },
+      { name: 'Backend', items: ['Python', 'FastAPI', 'Django', 'PHP', 'Laravel', 'Symfony', 'Node.js'] },
       { name: 'Infraestrutura', items: ['AWS ECS', 'AWS S3', 'Docker', 'RabbitMQ', 'Rancher', 'CI/CD'] },
       { name: 'Bancos de Dados', items: ['PostgreSQL', 'MySQL', 'DuckDB', 'Parquet', 'Eloquent ORM'] },
       { name: 'Observabilidade', items: ['Grafana', 'Graylog', 'CloudWatch'] },
-      { name: 'Frontend',       items: ['Vue.js', 'React', 'JavaScript', 'Drupal'] },
-      { name: 'Outros',         items: ['REST APIs', 'Automação SFTP', 'Git', 'SEO', 'C'] },
+      { name: 'Frontend', items: ['Vue.js', 'React', 'JavaScript', 'Drupal'] },
+      { name: 'Outros', items: ['REST APIs', 'Automação SFTP', 'Git', 'SEO', 'C'] },
     ],
   },
   education: {

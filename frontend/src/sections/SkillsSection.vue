@@ -1,11 +1,11 @@
 <template>
   <section id="stack">
     <div class="section-wrap">
-      <div class="section-label" data-animate style="--i:0">Tech Stack</div>
+      <div class="section-label" data-animate style="--i:0">{{ t('skills.title') }}</div>
 
       <div class="stack-grid">
         <div
-          v-for="(cat, i) in categories"
+          v-for="(cat, i) in t('skills.categories')"
           :key="cat.name"
           class="stack-card"
           :style="{ '--cat-color': cat.color, '--i': i + 1 }"
@@ -22,38 +22,9 @@
 </template>
 
 <script setup>
-const categories = [
-  {
-    name:  'Backend',
-    color: '#3b82f6',
-    items: ['Python', 'PHP', 'JavaScript', 'C', 'Django', 'Laravel', 'Symfony', 'FastAPI', 'Node.js'],
-  },
-  {
-    name:  'Infrastructure',
-    color: '#f59e0b',
-    items: ['AWS ECS', 'AWS S3', 'CloudWatch', 'Docker', 'RabbitMQ', 'Rancher', 'CI/CD'],
-  },
-  {
-    name:  'Databases',
-    color: '#10b981',
-    items: ['PostgreSQL', 'MySQL', 'DuckDB', 'Parquet', 'Eloquent ORM'],
-  },
-  {
-    name:  'Observability',
-    color: '#8b5cf6',
-    items: ['Grafana', 'Graylog', 'CloudWatch'],
-  },
-  {
-    name:  'Frontend',
-    color: '#ec4899',
-    items: ['Vue.js', 'React', 'Angular', 'JavaScript', 'Drupal', 'Bootstrap'],
-  },
-  {
-    name:  'Other',
-    color: '#6b7280',
-    items: ['REST APIs', 'SFTP Automation', 'Git', 'SEO', 'C'],
-  },
-]
+import { useLocale } from '../composables/useLocale'
+
+const { t } = useLocale()
 </script>
 
 <style scoped>

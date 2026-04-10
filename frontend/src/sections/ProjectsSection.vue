@@ -1,19 +1,16 @@
 <template>
   <section id="projects">
     <div class="section-wrap">
-      <div class="section-label" data-animate style="--i:0">Projects</div>
+      <div class="section-label" data-animate style="--i:0">{{ t('projects.title') }}</div>
 
       <div class="card proj-card" data-animate style="--i:1">
         <div class="proj-content">
-          <h2 class="proj-title">Local AI Stack</h2>
+          <h2 class="proj-title">{{ t('projects.items.0.name') }}</h2>
           <p class="proj-desc">
-            Self-hosted LLM inference stack using Ollama + LiteLLM. Runs multiple models locally — no API costs, no data leaving the machine.
+            {{ t('projects.items.0.desc') }}
           </p>
           <div class="proj-tags">
-            <span class="tag">Ollama</span>
-            <span class="tag">Python</span>
-            <span class="tag">Docker</span>
-            <span class="tag">LiteLLM</span>
+            <span v-for="tag in t('projects.items.0.tags')" :key="tag" class="tag">{{ tag }}</span>
           </div>
         </div>
         <div class="proj-preview">
@@ -23,6 +20,12 @@
     </div>
   </section>
 </template>
+
+<script setup>
+import { useLocale } from '../composables/useLocale'
+
+const { t } = useLocale()
+</script>
 
 <style scoped>
 .proj-card {

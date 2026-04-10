@@ -1,22 +1,24 @@
 <template>
   <section id="education">
     <div class="section-wrap">
-      <div class="section-label" data-animate style="--i:0">Education</div>
+      <div class="section-label" data-animate style="--i:0">{{ t('education.title') }}</div>
 
       <div class="edu-entries" data-animate style="--i:1">
-        <div v-for="edu in education" :key="edu.degree" class="edu-row">
+        <div class="edu-row">
           <div class="edu-meta">
-            <span class="edu-school">{{ edu.school }}</span>
-            <span class="edu-period">{{ edu.period }}</span>
+            <span class="edu-school">{{ t('education.degree.institution') }}</span>
+            <span class="edu-period">{{ t('education.degree.period') }}</span>
           </div>
-          <span class="edu-degree">{{ edu.degree }}</span>
+          <span class="edu-degree">{{ t('education.degree.name') }}</span>
         </div>
       </div>
 
       <div class="cert-section" data-animate style="--i:2">
-        <p class="cert-heading">Certifications</p>
+        <p class="cert-heading">{{ t('education.certifications') }}</p>
         <ul class="cert-list">
-          <li v-for="cert in certs" :key="cert">{{ cert }}</li>
+          <li v-for="cert in t('education.courses')" :key="cert.name">
+            {{ cert.name }} — {{ cert.issuer }}, {{ cert.year }}
+          </li>
         </ul>
       </div>
     </div>
@@ -24,26 +26,9 @@
 </template>
 
 <script setup>
-const education = [
-  {
-    degree: 'B.Sc. Information Systems',
-    school: 'PUC-PR',
-    period: 'Jun 2025 – Mar 2029',
-  },
-  {
-    degree: 'B.Sc. Computer Engineering',
-    school: 'PUC-PR',
-    period: 'Mar 2024 – Jun 2025 (transferred)',
-  },
-]
+import { useLocale } from '../composables/useLocale'
 
-const certs = [
-  'Harvard CS50W Django — Jan 2025',
-  'Symfony Framework Hands-On — Udemy, Oct 2024',
-  'PHP Bootcamp with CMS Project — Udemy, Dec 2022',
-  'JavaScript Complete Course — Udemy, Oct 2021',
-  'TOEFL 600 — English Fluent (TALKEN, 2014–2022)',
-]
+const { t } = useLocale()
 </script>
 
 <style scoped>

@@ -16,8 +16,8 @@ export default {
   socialProof: {
     items: [
       { value: '20M+', label: 'Records per pipeline run' },
-      { value: '~0',   label: 'Manual ops remaining' },
-      { value: '3+',   label: 'Years in fintech prod' },
+      { value: '~0', label: 'Manual ops remaining' },
+      { value: '3+', label: 'Years in fintech prod' },
       { value: '150%', label: 'Organic traffic growth' },
     ],
   },
@@ -28,21 +28,25 @@ export default {
         icon: 'server',
         title: 'Scalable Backend Systems',
         desc: 'Design and build Python microservices that handle high-volume data reliably in production.',
+        iconPath: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
       },
       {
         icon: 'database',
         title: 'Large-scale Data Pipelines',
         desc: 'Process millions of records efficiently using DuckDB, Parquet, S3 and async batch patterns.',
+        iconPath: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>',
       },
       {
         icon: 'network',
         title: 'Microservices Architecture',
         desc: 'Design event-driven systems with RabbitMQ, REST APIs and AWS ECS that stay observable.',
+        iconPath: '<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/>',
       },
       {
         icon: 'automation',
         title: 'Workflow Automation',
         desc: 'Replace manual operations with structured, reliable automations that eliminate human error.',
+        iconPath: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
       },
     ],
   },
@@ -103,12 +107,12 @@ export default {
   skills: {
     title: 'Tech Stack',
     categories: [
-      { name: 'Backend',         items: ['Python', 'FastAPI', 'Django', 'PHP', 'Laravel', 'Symfony', 'Node.js'] },
-      { name: 'Infrastructure',  items: ['AWS ECS', 'AWS S3', 'Docker', 'RabbitMQ', 'Rancher', 'CI/CD'] },
-      { name: 'Databases',       items: ['PostgreSQL', 'MySQL', 'DuckDB', 'Parquet', 'Eloquent ORM'] },
-      { name: 'Observability',   items: ['Grafana', 'Graylog', 'CloudWatch'] },
-      { name: 'Frontend',        items: ['Vue.js', 'React', 'JavaScript', 'Drupal'] },
-      { name: 'Other',           items: ['REST APIs', 'SFTP Automation', 'Git', 'SEO', 'C'] },
+      { name: 'Backend', items: ['Python', 'FastAPI', 'Django', 'PHP', 'Laravel', 'Symfony', 'Node.js'] },
+      { name: 'Infrastructure', items: ['AWS ECS', 'AWS S3', 'Docker', 'RabbitMQ', 'Rancher', 'CI/CD'] },
+      { name: 'Databases', items: ['PostgreSQL', 'MySQL', 'DuckDB', 'Parquet', 'Eloquent ORM'] },
+      { name: 'Observability', items: ['Grafana', 'Graylog', 'CloudWatch'] },
+      { name: 'Frontend', items: ['Vue.js', 'React', 'JavaScript', 'Drupal'] },
+      { name: 'Other', items: ['REST APIs', 'SFTP Automation', 'Git', 'SEO', 'C'] },
     ],
   },
   education: {

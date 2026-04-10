@@ -1,11 +1,11 @@
 <template>
-  <section>
+  <section id="experience">
     <div class="section-wrap">
-      <div class="section-label" data-animate style="--i:0">Experience</div>
+      <div class="section-label" data-animate style="--i:0">{{ t('experience.title') }}</div>
 
       <div class="timeline">
         <div
-          v-for="(job, i) in jobs"
+          v-for="(job, i) in t('experience.items')"
           :key="job.company"
           class="card timeline-card"
           data-animate
@@ -19,8 +19,8 @@
               <span class="timeline-role">{{ job.role }}</span>
             </div>
             <div class="timeline-right">
-              <span class="timeline-period">{{ job.period }}</span>
-              <span v-if="job.current" class="timeline-badge">&#9679; Present</span>
+              <span class="timeline-period">{{ job.start }} – {{ job.current ? t('experience.present') : job.end }}</span>
+              <span v-if="job.current" class="timeline-badge">&#9679; {{ t('experience.present') }}</span>
             </div>
           </div>
 
@@ -34,41 +34,9 @@
 </template>
 
 <script setup>
-const jobs = [
-  {
-    company: 'QuiteJá',
-    role:    'Backend Developer',
-    period:  'Jan 2025 – Present',
-    current: true,
-    bullets: [
-      'Developed and maintained Python microservices for financial system integrations and payment automation',
-      'Built and optimized data pipelines for importing client portfolios and automating billing workflows',
-      'Managed infrastructure using AWS (ECS, S3, CloudWatch), RabbitMQ, and SFTP',
-    ],
-  },
-  {
-    company: 'Inuar',
-    role:    'Full-Stack Developer',
-    period:  'Dec 2021 – Feb 2024',
-    current: false,
-    bullets: [
-      'Built full-stack applications using Laravel + Vue.js with custom REST API and role-based auth',
-      'Led Drupal 6→10 migration for a major news portal — all custom modules preserved, zero visual regressions',
-      'Investigated and remediated incidents in compromised WordPress environments, implemented hardening',
-    ],
-  },
-  {
-    company: 'Gradeup',
-    role:    'Developer & IT Support',
-    period:  'Jun 2022 – Jun 2024',
-    current: false,
-    bullets: [
-      '150% organic traffic growth via SEO audits with Lighthouse, maintained score above 85',
-      'Implemented VR healthcare management platform (Oculus + Vue.js) with custom REST API and role-based auth',
-      'Automated CRM lead pipelines in RD Station, cutting manual reporting overhead for the marketing team',
-    ],
-  },
-]
+import { useLocale } from '../composables/useLocale'
+
+const { t } = useLocale()
 </script>
 
 <style scoped>

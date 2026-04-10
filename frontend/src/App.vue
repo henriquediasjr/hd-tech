@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useLocale }      from './composables/useLocale'
 import HeroSection        from './sections/HeroSection.vue'
 import HowICanHelpSection from './sections/HowICanHelpSection.vue'
 import ExperienceSection  from './sections/ExperienceSection.vue'
@@ -8,16 +9,18 @@ import SkillsSection      from './sections/SkillsSection.vue'
 import ContactSection     from './sections/ContactSection.vue'
 import EducationSection   from './sections/EducationSection.vue'
 
+const { locale, setLocale, t } = useLocale()
+
 const scrolled  = ref(false)
 const navOpen   = ref(false)
 const activeSection = ref('')
 
-const navLinks = [
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects',   label: 'Projects'   },
-  { id: 'stack',      label: 'Stack'      },
-  { id: 'contact',    label: 'Contact'    },
-]
+const navLinks = computed(() => [
+  { id: 'experience', label: t('nav.experience') },
+  { id: 'projects',   label: t('nav.projects')   },
+  { id: 'stack',      label: t('nav.skills')     },
+  { id: 'contact',    label: t('nav.contact')    },
+])
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -82,9 +85,19 @@ onUnmounted(() => cleanups.forEach(fn => fn()))
 
         <div class="nav-right">
           <div class="locale-toggle">
-            <span class="locale-opt locale-opt--active">EN</span>
+            <button
+              class="locale-opt"
+              :class="{ 'locale-opt--active': locale === 'en' }"
+              @click="setLocale('en')"
+              aria-label="English language"
+            >EN</button>
             <span class="locale-sep">|</span>
-            <span class="locale-opt">PT</span>
+            <button
+              class="locale-opt"
+              :class="{ 'locale-opt--active': locale === 'pt' }"
+              @click="setLocale('pt')"
+              aria-label="Portuguese language"
+            >PT</button>
           </div>
           <button class="btn-nav-cta" @click="scrollTo('contact')">Book a call</button>
           <button

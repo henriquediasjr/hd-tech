@@ -1,5 +1,8 @@
 <script setup>
 import { onMounted } from 'vue'
+import { useLocale } from '../composables/useLocale'
+
+const { t } = useLocale()
 
 onMounted(() => {
   const els = document.querySelectorAll('[data-animate]')
@@ -25,46 +28,32 @@ onMounted(() => {
 
       <!-- Headline -->
       <h1 class="hero-headline" data-animate style="--i:1">
-        Backend engineer scaling systems to
-        <em class="serif-italic">20M+ records</em>
-        per pipeline
+        {{ t('hero.headline') }}
       </h1>
 
       <!-- Subline -->
       <p class="hero-sub" data-animate style="--i:2">
-        I build reliable, event-driven backend systems using Python, RabbitMQ and AWS.
+        {{ t('hero.subheadline') }}
       </p>
 
       <!-- CTAs -->
       <div class="hero-ctas" data-animate style="--i:3">
         <a href="#contact" class="btn-primary" @click.prevent="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-          Book a 15-min call
+          {{ t('hero.primaryCta') }}
         </a>
         <a href="#experience" class="btn-ghost" @click.prevent="document.getElementById('experience').scrollIntoView({behavior:'smooth'})">
-          View my work
+          {{ t('hero.secondaryCta') }}
         </a>
       </div>
       <p class="hero-microcopy" data-animate style="--i:4">
-        No commitment — just a quick technical chat
+        {{ t('hero.microcopy') }}
       </p>
 
       <!-- Stats strip -->
       <div class="hero-stats" data-animate style="--i:5">
-        <div class="stat">
-          <span class="stat-value">20M+</span>
-          <span class="stat-label">Records per run</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">~0</span>
-          <span class="stat-label">Manual ops remaining</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">3+</span>
-          <span class="stat-label">Years in prod</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">150%</span>
-          <span class="stat-label">Organic traffic growth</span>
+        <div v-for="(stat, i) in t('socialProof.items')" :key="i" class="stat">
+          <span class="stat-value">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
         </div>
       </div>
 
