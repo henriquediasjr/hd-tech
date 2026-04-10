@@ -4,7 +4,7 @@ services:
     ports:
       - "${API_PORT:-8100}:8000"
     volumes:
-      - ./backend:/app          # hot reload in dev
+      - ./backend:/app # hot reload in dev
     env_file:
       - ./backend/.env
     environment:
@@ -21,7 +21,8 @@ services:
       - "${FRONTEND_PORT:-5173}:5173"
     volumes:
       - ./frontend:/app
-      - /app/node_modules       # isolate container's node_modules
+      - /app/node_modules # isolate container's node_modules
+    command: sh -c "npm install && npm run dev"
     depends_on:
       - api
     restart: unless-stopped
@@ -33,11 +34,11 @@ services:
       POSTGRES_USER: portfolio
       POSTGRES_PASSWORD: portfolio
     ports:
-      - "${DB_PORT:-5433}:5432"  # 5433 to avoid conflicts with a local postgres
+      - "${DB_PORT:-5433}:5432" # 5433 to avoid conflicts with a local postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio"]
+      test: [ "CMD-SHELL", "pg_isready -U portfolio -d portfolio" ]
       interval: 5s
       timeout: 5s
       retries: 5
