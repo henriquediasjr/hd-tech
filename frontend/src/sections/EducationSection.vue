@@ -1,151 +1,125 @@
-<script setup>
-import { computed } from 'vue'
-import { useLocale } from '../composables/useLocale.js'
-
-const { t, locale } = useLocale()
-const degree = computed(() => t('education.degree'))
-const courses = computed(() => t('education.courses'))
-</script>
-
 <template>
   <section id="education">
-    <h2 class="section-title">{{ t('education.title') }}</h2>
+    <div class="section-wrap">
+      <div class="section-label" data-animate style="--i:0">Education</div>
 
-    <div class="degree-card card">
-      <div class="degree-header">
-        <div>
-          <h3 class="degree-name">{{ degree.name }}</h3>
-          <p class="degree-institution">{{ degree.institution }}</p>
-          <p class="degree-location">{{ degree.location }}</p>
-        </div>
-        <div class="degree-meta">
-          <span class="degree-period">{{ degree.period }}</span>
-          <span class="degree-status">{{ degree.status }}</span>
+      <div class="edu-entries" data-animate style="--i:1">
+        <div v-for="edu in education" :key="edu.degree" class="edu-row">
+          <div class="edu-meta">
+            <span class="edu-school">{{ edu.school }}</span>
+            <span class="edu-period">{{ edu.period }}</span>
+          </div>
+          <span class="edu-degree">{{ edu.degree }}</span>
         </div>
       </div>
+
+      <div class="cert-section" data-animate style="--i:2">
+        <p class="cert-heading">Certifications</p>
+        <ul class="cert-list">
+          <li v-for="cert in certs" :key="cert">{{ cert }}</li>
+        </ul>
+      </div>
     </div>
-
-    <h3 class="certs-title">{{ t('education.certifications') }}</h3>
-
-    <ul class="certs-list">
-      <li v-for="course in courses" :key="course.name" class="cert-item">
-        <div class="cert-info">
-          <span class="cert-name">{{ course.name }}</span>
-          <span class="cert-issuer">{{ course.issuer }}</span>
-        </div>
-        <span class="cert-year">{{ course.year }}</span>
-      </li>
-    </ul>
   </section>
 </template>
 
+<script setup>
+const education = [
+  {
+    degree: 'B.Sc. Information Systems',
+    school: 'PUC-PR',
+    period: 'Jun 2025 – Mar 2029',
+  },
+  {
+    degree: 'B.Sc. Computer Engineering',
+    school: 'PUC-PR',
+    period: 'Mar 2024 – Jun 2025 (transferred)',
+  },
+]
+
+const certs = [
+  'Harvard CS50W Django — Jan 2025',
+  'Symfony Framework Hands-On — Udemy, Oct 2024',
+  'PHP Bootcamp with CMS Project — Udemy, Dec 2022',
+  'JavaScript Complete Course — Udemy, Oct 2021',
+  'TOEFL 600 — English Fluent (TALKEN, 2014–2022)',
+]
+</script>
+
 <style scoped>
-.degree-card {
-  margin-bottom: 2.5rem;
-}
-
-.degree-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.degree-name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 0.35rem;
-}
-
-.degree-institution {
-  color: var(--accent);
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-bottom: 0.2rem;
-}
-
-.degree-location {
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.degree-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.4rem;
-}
-
-.degree-period {
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.degree-status {
-  background: rgba(59, 130, 246, 0.15);
-  color: var(--accent);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  border-radius: 999px;
-  padding: 0.2rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.certs-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 1.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.certs-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.edu-entries {
   display: flex;
   flex-direction: column;
   gap: 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 40px;
 }
 
-.cert-item {
+.edu-row {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  align-items: center;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--border);
-  gap: 1rem;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-wrap: wrap;
 }
 
-.cert-item:last-child {
-  border-bottom: none;
-}
-
-.cert-info {
+.edu-meta {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 2px;
 }
 
-.cert-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text);
+.edu-degree {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #f4f4f5;
+  order: -1;
+  flex: 1;
+  min-width: 220px;
+}
+.edu-school {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+.edu-period {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: #52525b;
 }
 
-.cert-issuer {
-  font-size: 0.8rem;
-  color: var(--muted);
+.cert-section {}
+.cert-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #52525b;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.cert-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cert-list li {
+  font-family: 'Courier New', monospace;
+  font-size: 0.775rem;
+  color: #71717a;
+  padding-left: 14px;
+  position: relative;
+}
+.cert-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #3f3f46;
 }
 
-.cert-year {
-  font-size: 0.8rem;
-  color: var(--muted);
-  white-space: nowrap;
+@media (max-width: 480px) {
+  .edu-row { flex-direction: column; gap: 4px; }
 }
 </style>

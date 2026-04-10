@@ -1,180 +1,201 @@
 <script setup>
-import { useLocale } from '../composables/useLocale.js'
+import { onMounted } from 'vue'
 
-const { t } = useLocale()
-
-function scrollTo(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-}
+onMounted(() => {
+  const els = document.querySelectorAll('[data-animate]')
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target) }
+    })
+  }, { threshold: 0.05 })
+  els.forEach(el => obs.observe(el))
+})
 </script>
 
 <template>
-  <section id="hero" class="hero-section">
-    <div class="hero-content">
-      <p class="hero-greeting">{{ t('hero.greeting') }}</p>
-      <h1 class="hero-name">{{ t('hero.name') }}</h1>
-      <p class="hero-title">{{ t('hero.title') }}</p>
-      <p class="hero-subtitle">{{ t('hero.subtitle') }}</p>
+  <section id="hero" class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-inner">
 
-      <div class="hero-location">
-        <span class="location-icon">📍</span>
-        <span>{{ t('hero.location') }}</span>
+      <!-- Badge -->
+      <div class="badge" data-animate style="--i:0">
+        <span class="badge-dot"></span>
+        Available for new projects
       </div>
 
-      <div class="hero-socials">
-        <a href="mailto:henriquediasjr@gmail.com" class="social-link" title="Email">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          henriquediasjr@gmail.com
+      <!-- Headline -->
+      <h1 class="hero-headline" data-animate style="--i:1">
+        Backend engineer scaling systems to
+        <em class="serif-italic">20M+ records</em>
+        per pipeline
+      </h1>
+
+      <!-- Subline -->
+      <p class="hero-sub" data-animate style="--i:2">
+        I build reliable, event-driven backend systems using Python, RabbitMQ and AWS.
+      </p>
+
+      <!-- CTAs -->
+      <div class="hero-ctas" data-animate style="--i:3">
+        <a href="#contact" class="btn-primary" @click.prevent="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+          Book a 15-min call
         </a>
-        <a href="https://linkedin.com/in/henrique-dias-jr" target="_blank" rel="noopener" class="social-link" title="LinkedIn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-          LinkedIn
+        <a href="#experience" class="btn-ghost" @click.prevent="document.getElementById('experience').scrollIntoView({behavior:'smooth'})">
+          View my work
         </a>
-        <a href="https://github.com/henriquediasjr" target="_blank" rel="noopener" class="social-link" title="GitHub">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          GitHub
-        </a>
+      </div>
+      <p class="hero-microcopy" data-animate style="--i:4">
+        No commitment — just a quick technical chat
+      </p>
+
+      <!-- Stats strip -->
+      <div class="hero-stats" data-animate style="--i:5">
+        <div class="stat">
+          <span class="stat-value">20M+</span>
+          <span class="stat-label">Records per run</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">~0</span>
+          <span class="stat-label">Manual ops remaining</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">3+</span>
+          <span class="stat-label">Years in prod</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">150%</span>
+          <span class="stat-label">Organic traffic growth</span>
+        </div>
       </div>
 
-      <div class="hero-ctas">
-        <button class="btn-primary" @click="scrollTo('contact')">
-          {{ t('hero.scheduleCta') }}
-        </button>
-        <button class="btn-secondary" @click="scrollTo('contact')">
-          {{ t('hero.contactCta') }}
-        </button>
-      </div>
     </div>
-
-    <div class="hero-bg" aria-hidden="true"></div>
   </section>
 </template>
 
 <style scoped>
-.hero-section {
+.hero {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 6rem 1.5rem 4rem;
-  max-width: var(--max-w);
-  margin: 0 auto;
   overflow: hidden;
+  padding-top: 60px;
 }
 
-.hero-bg {
+.hero-glow {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 60% 40%, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+  filter: blur(80px);
   pointer-events: none;
-  z-index: 0;
 }
 
-.hero-content {
+.hero-inner {
   position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
   z-index: 1;
-  max-width: 640px;
 }
 
-.hero-greeting {
-  font-size: 1.1rem;
-  color: var(--accent);
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-}
-
-.hero-name {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 800;
-  color: var(--text);
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
-  letter-spacing: -1px;
-}
-
-.hero-title {
-  font-size: 1.35rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 0.35rem;
-}
-
-.hero-subtitle {
-  font-size: 1rem;
-  color: var(--muted);
-  margin-bottom: 1.25rem;
-}
-
-.hero-location {
+/* Badge */
+.badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  color: var(--muted);
-  font-size: 0.9rem;
-  margin-bottom: 1.75rem;
-  background: var(--surface);
-  padding: 0.35rem 0.75rem;
+  gap: 8px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 999px;
-  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #a1a1aa;
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 32px;
+}
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulse-dot 2s infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+  50%       { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
 }
 
-.hero-socials {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 2rem;
+/* Headline */
+.hero-headline {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 760px;
+  margin-bottom: 24px;
+  color: #f4f4f5;
 }
-
-.social-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 0.875rem;
-  transition: color 0.15s;
-}
-
-.social-link:hover {
+.serif-italic {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
   color: var(--accent);
 }
 
+/* Sub */
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  font-weight: 300;
+  color: #71717a;
+  max-width: 480px;
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+/* CTAs */
 .hero-ctas {
   display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
-  gap: 0.75rem;
+}
+/* btn-primary / btn-ghost from App.vue global */
+
+.hero-microcopy {
+  font-size: 0.75rem;
+  color: #52525b;
+  margin-bottom: 64px;
 }
 
-.btn-primary {
-  padding: 0.75rem 1.75rem;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius);
+/* Stats */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat-value {
+  font-size: 1.5rem;
   font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
+  color: #f4f4f5;
+  letter-spacing: -0.02em;
 }
+.stat-label { font-size: 0.75rem; color: #71717a; font-weight: 300; }
 
-.btn-primary:hover {
-  background: var(--accent-hover);
+@media (max-width: 768px) {
+  .hero-inner { padding: 0 24px; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 24px; }
 }
-
-.btn-secondary {
-  padding: 0.75rem 1.75rem;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-weight: 500;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-}
-
-.btn-secondary:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+@media (max-width: 480px) {
+  .hero-inner { padding: 0 20px; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .hero-ctas { flex-direction: column; align-items: flex-start; }
 }
 </style>

@@ -1,0 +1,80 @@
+<script setup>
+import { computed } from 'vue'
+import { useLocale } from '../composables/useLocale.js'
+
+const { t } = useLocale()
+const items = computed(() => t('socialProof.items'))
+</script>
+
+<template>
+  <div class="proof-strip">
+    <div class="proof-inner">
+      <div v-for="item in items" :key="item.value" class="proof-item">
+        <span class="proof-value">{{ item.value }}</span>
+        <span class="proof-label">{{ item.label }}</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.proof-strip {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 2.5rem 1.5rem;
+}
+
+.proof-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  text-align: center;
+}
+
+.proof-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0.5rem;
+  border-right: 1px solid var(--border);
+}
+
+.proof-item:last-child {
+  border-right: none;
+}
+
+.proof-value {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+
+.proof-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.4;
+  max-width: 120px;
+}
+
+@media (max-width: 600px) {
+  .proof-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .proof-item {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.25rem;
+  }
+  .proof-item:nth-child(3),
+  .proof-item:nth-child(4) {
+    border-bottom: none;
+  }
+}
+</style>

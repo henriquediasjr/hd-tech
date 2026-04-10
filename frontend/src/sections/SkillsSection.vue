@@ -1,63 +1,114 @@
-<script setup>
-import { computed } from 'vue'
-import { useLocale } from '../composables/useLocale.js'
-
-const { t, locale } = useLocale()
-const categories = computed(() => t('skills.categories'))
-</script>
-
 <template>
-  <section id="skills">
-    <h2 class="section-title">{{ t('skills.title') }}</h2>
+  <section id="stack">
+    <div class="section-wrap">
+      <div class="section-label" data-animate style="--i:0">Tech Stack</div>
 
-    <div class="categories">
-      <div v-for="cat in categories" :key="cat.name" class="category">
-        <h3 class="category-name">{{ cat.name }}</h3>
-        <div class="pills">
-          <span v-for="item in cat.items" :key="item" class="pill">{{ item }}</span>
+      <div class="stack-grid">
+        <div
+          v-for="(cat, i) in categories"
+          :key="cat.name"
+          class="stack-card"
+          :style="{ '--cat-color': cat.color, '--i': i + 1 }"
+          data-animate
+        >
+          <h3 class="stack-cat">{{ cat.name }}</h3>
+          <div class="stack-tags">
+            <span v-for="item in cat.items" :key="item" class="stack-tag">{{ item }}</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 </template>
 
+<script setup>
+const categories = [
+  {
+    name:  'Backend',
+    color: '#3b82f6',
+    items: ['Python', 'PHP', 'JavaScript', 'C', 'Django', 'Laravel', 'Symfony', 'FastAPI', 'Node.js'],
+  },
+  {
+    name:  'Infrastructure',
+    color: '#f59e0b',
+    items: ['AWS ECS', 'AWS S3', 'CloudWatch', 'Docker', 'RabbitMQ', 'Rancher', 'CI/CD'],
+  },
+  {
+    name:  'Databases',
+    color: '#10b981',
+    items: ['PostgreSQL', 'MySQL', 'DuckDB', 'Parquet', 'Eloquent ORM'],
+  },
+  {
+    name:  'Observability',
+    color: '#8b5cf6',
+    items: ['Grafana', 'Graylog', 'CloudWatch'],
+  },
+  {
+    name:  'Frontend',
+    color: '#ec4899',
+    items: ['Vue.js', 'React', 'Angular', 'JavaScript', 'Drupal', 'Bootstrap'],
+  },
+  {
+    name:  'Other',
+    color: '#6b7280',
+    items: ['REST APIs', 'SFTP Automation', 'Git', 'SEO', 'C'],
+  },
+]
+</script>
+
 <style scoped>
-.categories {
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.stack-card {
+  background: #111113;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 3px solid var(--cat-color);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.stack-card:hover {
+  border-color: rgba(255, 255, 255, 0.13);
+  border-left-color: var(--cat-color);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+.stack-cat {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #f4f4f5;
+  margin-bottom: 12px;
   display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
+  align-items: center;
+  gap: 8px;
+}
+.stack-cat::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cat-color);
+  flex-shrink: 0;
 }
 
-.category-name {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  margin-bottom: 0.75rem;
-}
-
-.pills {
+.stack-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 6px;
 }
 
-.pill {
-  background: var(--surface2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.3rem 0.9rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-  cursor: default;
-}
-
-.pill:hover {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: var(--accent);
-  color: var(--accent);
+.stack-tag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #71717a;
 }
 </style>
