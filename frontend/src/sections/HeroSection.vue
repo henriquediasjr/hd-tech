@@ -29,14 +29,18 @@ onMounted(() => {
         <!-- Left: text -->
         <div class="hero-text">
           <h1 class="hero-headline" data-animate style="--i:0">
-            {{ t('hero.headline') }}
+            <span class="brand-hd">HD</span><span class="brand-tech"> Tech</span>
           </h1>
 
-          <p class="hero-sub" data-animate style="--i:1">
+          <p class="hero-tagline" data-animate style="--i:1">
+            {{ t('hero.tagline') }}
+          </p>
+
+          <p class="hero-sub" data-animate style="--i:2">
             {{ t('hero.subheadline') }}
           </p>
 
-          <div class="hero-ctas" data-animate style="--i:2">
+          <div class="hero-ctas" data-animate style="--i:3">
             <a href="#contact" class="btn-primary" @click.prevent="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
               {{ t('hero.primaryCta') }}
             </a>
@@ -45,7 +49,7 @@ onMounted(() => {
             </a>
           </div>
 
-          <div class="availability" data-animate style="--i:3">
+          <div class="availability" data-animate style="--i:4">
             <span class="badge-dot"></span>
             <span>Available for new projects</span>
           </div>
@@ -90,7 +94,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding-top: 60px;
+  padding: 80px 0 48px;
 }
 
 .hero-glow {
@@ -146,22 +150,33 @@ onMounted(() => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 80px;
+  gap: 60px;
 }
 
 /* Text side */
 .hero-text {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
+/* Brand headline */
 .hero-headline {
-  font-size: clamp(1.875rem, 4vw, 3rem);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  color: #f4f4f5;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+}
+.brand-hd   { color: var(--accent); }
+.brand-tech { color: #f4f4f5; }
+
+/* One-liner role tagline */
+.hero-tagline {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #52525b;
   margin-bottom: 20px;
 }
 
@@ -169,8 +184,8 @@ onMounted(() => {
   font-size: 1rem;
   font-weight: 300;
   color: #71717a;
-  max-width: 400px;
-  margin-bottom: 36px;
+  max-width: 380px;
+  margin-bottom: 32px;
   line-height: 1.7;
 }
 
@@ -178,7 +193,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
@@ -266,19 +281,26 @@ onMounted(() => {
 .hero-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  margin-top: 56px;
-  padding-top: 32px;
+  gap: 0;
+  margin-top: 48px;
+  padding-top: 28px;
   border-top: 1px solid rgba(255,255,255,0.07);
 }
-.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 24px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.stat:last-child { border-right: none; padding-right: 0; }
 .stat-value {
   font-size: 1.375rem;
   font-weight: 600;
   color: #f4f4f5;
   letter-spacing: -0.02em;
 }
-.stat-label { font-size: 0.7rem; color: #52525b; font-weight: 300; line-height: 1.5; }
+.stat-label { font-size: 0.68rem; color: #52525b; font-weight: 300; line-height: 1.5; }
 
 /* Animations */
 [data-animate] {
@@ -295,19 +317,23 @@ onMounted(() => {
 @media (max-width: 900px) {
   .hero-content {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 40px;
   }
   .hero-visual { order: -1; }
   .code-card { max-width: 340px; }
 }
 @media (max-width: 768px) {
   .hero-inner { padding: 0 24px; }
-  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 0; }
+  .stat { padding-right: 0; border-right: none; padding-bottom: 20px; }
+  .stat:nth-child(odd) { padding-right: 24px; border-right: 1px solid rgba(255,255,255,0.06); }
 }
 @media (max-width: 480px) {
+  .hero { padding: 72px 0 40px; }
   .hero-inner { padding: 0 20px; }
+  .hero-headline { font-size: clamp(2.5rem, 14vw, 3.5rem); }
   .hero-ctas  { flex-direction: column; align-items: flex-start; }
   .hero-visual { display: none; }
-  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
 }
 </style>

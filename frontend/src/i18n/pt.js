@@ -6,8 +6,9 @@ export default {
     contact: 'Contato',
   },
   hero: {
-    headline: 'Engenheiro backend escalando sistemas para 20M+ registros por pipeline',
-    subheadline: 'Construo sistemas backend confiáveis e orientados a eventos com Python, RabbitMQ e AWS.',
+    headline: 'HD Tech',
+    tagline: 'Engenharia Backend · Python · PHP · Cloud',
+    subheadline: 'Sistemas backend confiáveis e escaláveis — de pipelines de dados a aplicações web completas.',
     primaryCta: 'Agendar call de 15 min',
     secondaryCta: 'Ver meu trabalho',
     microcopy: 'Sem compromisso — apenas uma conversa técnica rápida',
