@@ -1,17 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useLocale } from '../composables/useLocale'
 
 const { t } = useLocale()
-
-// ── Calendar state ──────────────────────────────────────────────────────────
-const today     = new Date()
-const calYear   = ref(today.getFullYear())
-const calMonth  = ref(today.getMonth())
-const selDay    = ref(null)
-const selSlot   = ref(null)
-const bookName  = ref('')
-const bookEmail = ref('')
 
 // ── Message form state ───────────────────────────────────────────────────────
 const msgName    = ref('')
@@ -19,88 +10,6 @@ const msgEmail   = ref('')
 const msgNeed    = ref('')
 const msgMessage = ref('')
 const msgSent    = ref(false)
-
-// ── Constants ────────────────────────────────────────────────────────────────
-const DAY_NAMES = ['Mo','Tu','We','Th','Fr','Sa','Su']
-const TIME_SLOTS = ['09:00','10:00','11:00','14:00','15:00','16:00']
-
-// ── Calendar computed ────────────────────────────────────────────────────────
-const monthNames = computed(() => {
-  const locale = t('nav.experience') // Use locale detection
-  // For EN, use English months; for PT, use Portuguese
-  const map = {
-    'Experience': ['January','February','March','April','May','June','July','August','September','October','November','December'],
-    'Experiência': ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-  }
-  return map[locale] || map['Experience']
-})
-
-const monthLabel = computed(() => `${monthNames.value[calMonth.value]} ${calYear.value}`)
-
-const daysInMonth = computed(() =>
-  new Date(calYear.value, calMonth.value + 1, 0).getDate()
-)
-
-const startOffset = computed(() => {
-  const dow = new Date(calYear.value, calMonth.value, 1).getDay()
-  return dow === 0 ? 6 : dow - 1  // Mon=0 … Sun=6
-})
-
-const calCells = computed(() => {
-  const cells = []
-  for (let i = 0; i < startOffset.value; i++) cells.push(null)
-  for (let d = 1; d <= daysInMonth.value; d++) cells.push(d)
-  while (cells.length % 7 !== 0) cells.push(null)
-  return cells
-})
-
-function isPast(d) {
-  const date  = new Date(calYear.value, calMonth.value, d)
-  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-  return date < start
-}
-
-function isWeekend(d) {
-  const dow = new Date(calYear.value, calMonth.value, d).getDay()
-  return dow === 0 || dow === 6
-}
-
-function isDisabled(d) {
-  if (!d) return true
-  return isPast(d) || isWeekend(d)
-}
-
-function isToday(d) {
-  return (
-    d === today.getDate() &&
-    calMonth.value === today.getMonth() &&
-    calYear.value  === today.getFullYear()
-  )
-}
-
-function pickDay(d) {
-  if (isDisabled(d)) return
-  selDay.value  = d
-  selSlot.value = null
-}
-
-function prevMonth() {
-  if (calMonth.value === 0) { calMonth.value = 11; calYear.value-- }
-  else calMonth.value--
-  selDay.value = null; selSlot.value = null
-}
-
-function nextMonth() {
-  if (calMonth.value === 11) { calMonth.value = 0; calYear.value++ }
-  else calMonth.value++
-  selDay.value = null; selSlot.value = null
-}
-
-// TODO: integrate with Google Calendar API or Calendly
-function confirmBooking() {
-  if (!selDay.value || !selSlot.value || !bookName.value || !bookEmail.value) return
-  alert(`Booking confirmed: ${selDay.value}/${calMonth.value + 1}/${calYear.value} at ${selSlot.value}`)
-}
 
 async function sendMessage() {
   if (!msgName.value || !msgEmail.value || !msgMessage.value) return
@@ -118,6 +27,13 @@ async function sendMessage() {
   } catch {}
   msgSent.value = true
 }
+
+onMounted(() => {
+  const script = document.createElement('script')
+  script.src = 'https://assets.calendly.com/assets/external/widget.js'
+  script.async = true
+  document.head.appendChild(script)
+})
 </script>
 
 <template>
@@ -133,60 +49,9 @@ async function sendMessage() {
           <p class="col-sub">{{ t('contact.subtitle') }}</p>
 
           <div class="calendar">
-            <!-- Header -->
-            <div class="cal-header">
-              <button class="cal-nav" @click="prevMonth" aria-label="Previous month">&#8249;</button>
-              <span class="cal-month-label">{{ monthLabel }}</span>
-              <button class="cal-nav" @click="nextMonth" aria-label="Next month">&#8250;</button>
-            </div>
-
-            <!-- Day names -->
-            <div class="cal-day-names">
-              <span v-for="d in DAY_NAMES" :key="d" class="cal-dn">{{ d }}</span>
-            </div>
-
-            <!-- Day grid -->
-            <div class="cal-grid">
-              <button
-                v-for="(cell, idx) in calCells"
-                :key="idx"
-                class="cal-cell"
-                :class="{
-                  'cal-cell--empty':     !cell,
-                  'cal-cell--disabled':   cell && isDisabled(cell),
-                  'cal-cell--today':      cell && isToday(cell),
-                  'cal-cell--selected':   cell && cell === selDay,
-                  'cal-cell--available':  cell && !isDisabled(cell),
-                }"
-                :disabled="!cell || isDisabled(cell)"
-                @click="pickDay(cell)"
-                :aria-label="cell ? String(cell) : ''"
-              >
-                <span v-if="cell">{{ cell }}</span>
-              </button>
-            </div>
-
-            <!-- Time slots -->
-            <div v-if="selDay" class="time-slots">
-              <button
-                v-for="slot in TIME_SLOTS"
-                :key="slot"
-                class="time-slot"
-                :class="{ 'time-slot--sel': selSlot === slot }"
-                @click="selSlot = slot"
-              >{{ slot }}</button>
-            </div>
-
-            <!-- Booking inputs -->
-            <div v-if="selDay && selSlot" class="booking-inputs">
-              <div class="field-row">
-                <input v-model="bookName"  class="c-input" :placeholder="t('contact.form.namePlaceholder')" />
-                <input v-model="bookEmail" class="c-input" type="email" :placeholder="t('contact.form.emailPlaceholder')" />
-              </div>
-              <button class="btn-primary btn-full" @click="confirmBooking" data-action="book-calendar">
-                {{ t('contact.scheduleBtn') || 'Confirm' }}
-              </button>
-            </div>
+            <!-- Calendly inline widget begin -->
+            <div class="calendly-inline-widget" data-url="https://calendly.com/henriquediasjr/30min" style="min-width:320px;height:700px;"></div>
+            <!-- Calendly inline widget end -->
           </div>
         </div>
 

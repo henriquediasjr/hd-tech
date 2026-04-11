@@ -109,9 +109,9 @@ export default {
     categories: [
       { name: 'Backend', items: ['Python', 'FastAPI', 'Django', 'PHP', 'Laravel', 'Symfony', 'Node.js'] },
       { name: 'Infrastructure', items: ['AWS ECS', 'AWS S3', 'Docker', 'RabbitMQ', 'Rancher', 'CI/CD'] },
-      { name: 'Databases', items: ['PostgreSQL', 'MySQL', 'DuckDB', 'Parquet', 'Eloquent ORM'] },
+      { name: 'Databases', items: ['PostgreSQL', 'MySQL', 'DuckDB', 'MongoDB', 'Eloquent ORM'] },
       { name: 'Observability', items: ['Grafana', 'Graylog', 'CloudWatch'] },
-      { name: 'Frontend', items: ['Vue.js', 'React', 'JavaScript', 'Drupal'] },
+      { name: 'Frontend', items: ['Vue.js', 'React', 'JavaScript'] },
       { name: 'Other', items: ['REST APIs', 'SFTP Automation', 'Git', 'SEO', 'C'] },
     ],
   },
