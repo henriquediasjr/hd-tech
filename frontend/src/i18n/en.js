@@ -15,10 +15,10 @@ export default {
   },
   socialProof: {
     items: [
+      { value: '4+', label: 'Years shipping to production' },
       { value: '20M+', label: 'Records per pipeline run' },
-      { value: '~0', label: 'Manual ops remaining' },
-      { value: '3+', label: 'Years in fintech prod' },
-      { value: '150%', label: 'Organic traffic growth' },
+      { value: '3+', label: 'Years in regulated fintech' },
+      { value: '150%', label: 'SEO organic traffic growth' },
     ],
   },
   howICanHelp: {
@@ -29,6 +29,12 @@ export default {
         title: 'Scalable Backend Systems',
         desc: 'Design and build Python microservices that handle high-volume data reliably in production.',
         iconPath: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+      },
+      {
+        icon: 'php',
+        title: 'PHP & Laravel Applications',
+        desc: 'Build and maintain robust web applications and REST APIs with Laravel and Symfony — from greenfield projects to legacy migrations.',
+        iconPath: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
       },
       {
         icon: 'database',

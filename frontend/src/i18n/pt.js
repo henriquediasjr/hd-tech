@@ -15,10 +15,10 @@ export default {
   },
   socialProof: {
     items: [
+      { value: '4+', label: 'Anos entregando em produção' },
       { value: '20M+', label: 'Registros por execução' },
-      { value: '~0', label: 'Ops manuais restantes' },
-      { value: '3+', label: 'Anos em fintech prod' },
-      { value: '150%', label: 'Crescimento de tráfego' },
+      { value: '3+', label: 'Anos em fintech regulado' },
+      { value: '150%', label: 'Crescimento de tráfego orgânico' },
     ],
   },
   howICanHelp: {
@@ -29,6 +29,12 @@ export default {
         title: 'Sistemas Backend Escaláveis',
         desc: 'Design e construção de microsserviços Python que lidam com dados de alto volume de forma confiável.',
         iconPath: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+      },
+      {
+        icon: 'php',
+        title: 'Aplicações PHP & Laravel',
+        desc: 'Desenvolvimento e manutenção de aplicações web robustas e APIs REST com Laravel e Symfony — de projetos novos a migrações de sistemas legados.',
+        iconPath: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
       },
       {
         icon: 'database',
