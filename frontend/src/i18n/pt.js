@@ -55,6 +55,12 @@ export default {
         desc: 'Substituição de operações manuais por automações estruturadas e confiáveis que eliminam erros humanos.',
         iconPath: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
       },
+      {
+        icon: 'ai',
+        title: 'Integração de IA & LLMs',
+        desc: 'Integre IA ao seu produto — LLMs self-hosted com Ollama, APIs do Claude e Copilot, ou pipelines RAG personalizados que mantêm seus dados privados.',
+        iconPath: '<path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M15 13a6 6 0 0 1-6 0"/><path d="M12 17v4"/><path d="M8 21h8"/>',
+      },
     ],
   },
   experience: {
@@ -65,6 +71,7 @@ export default {
         role: 'Desenvolvedor Backend',
         company: 'QuiteJá',
         type: 'Fintech',
+        icon: 'fintech',
         start: 'Jan 2025',
         end: 'Atual',
         bullets: [
@@ -78,10 +85,12 @@ export default {
         role: 'Desenvolvedor Full-Stack',
         company: 'Inuar',
         type: 'Agência Digital',
+        icon: 'agency',
         start: 'Dez 2021',
         end: 'Fev 2024',
         bullets: [
-          'Construiu plataforma de gestão de saúde corporativa (Laravel + Vue.js) com API REST customizada e autenticação por perfil de acesso.',
+          'Construiu plataforma de gestão de saúde corporativa (Laravel + Vue.js) com API REST customizada, models Eloquent ORM e autenticação por perfil — cobrindo agendamento, prontuários e relatórios.',
+          'Desenvolveu relacionamentos e query scopes Eloquent reutilizáveis que reduziram em ~40% o tempo médio de consulta nos endpoints de relatório com alto tráfego.',
           'Liderou migração Drupal 6 → 10 para grande portal de notícias — todos os módulos customizados preservados, zero regressões visuais.',
           'Investigou e remediou malware em ambientes WordPress comprometidos; implementou hardening para prevenir reinfecções.',
         ],
@@ -90,6 +99,7 @@ export default {
         role: 'Desenvolvedor & Suporte de TI',
         company: 'Gradeup',
         type: 'Consultoria Educacional',
+        icon: 'education',
         start: 'Jun 2022',
         end: 'Jan 2024',
         bullets: [

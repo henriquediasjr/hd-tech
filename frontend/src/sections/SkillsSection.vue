@@ -6,7 +6,7 @@
       <div class="stack-grid">
         <div
           v-for="(cat, i) in t('skills.categories')"
-          :key="cat.name"
+          :key="i"
           class="stack-card"
           :style="{ '--cat-color': cat.color, '--i': i + 1 }"
           data-animate

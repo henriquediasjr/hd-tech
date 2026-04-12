@@ -55,6 +55,12 @@ export default {
         desc: 'Replace manual operations with structured, reliable automations that eliminate human error.',
         iconPath: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
       },
+      {
+        icon: 'ai',
+        title: 'AI Integration & LLM Tools',
+        desc: 'Integrate AI into your product — self-hosted LLMs with Ollama, Claude and Copilot APIs, or custom RAG pipelines that keep your data private.',
+        iconPath: '<path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M15 13a6 6 0 0 1-6 0"/><path d="M12 17v4"/><path d="M8 21h8"/>',
+      },
     ],
   },
   experience: {
@@ -65,6 +71,7 @@ export default {
         role: 'Backend Developer',
         company: 'QuiteJá',
         type: 'Fintech',
+        icon: 'fintech',
         start: 'Jan 2025',
         end: 'Present',
         bullets: [
@@ -78,10 +85,12 @@ export default {
         role: 'Full-Stack Developer',
         company: 'Inuar',
         type: 'Digital Agency',
+        icon: 'agency',
         start: 'Dec 2021',
         end: 'Feb 2024',
         bullets: [
-          'Built corporate healthcare management platform (Laravel + Vue.js) with custom REST API and role-based auth.',
+          'Built corporate healthcare management platform (Laravel + Vue.js) with custom REST API, Eloquent ORM models and role-based auth — covering scheduling, patient records and reporting.',
+          'Developed reusable Eloquent relationships and query scopes that cut average query time by ~40% on high-traffic reporting endpoints.',
           'Led Drupal 6 → 10 migration for a major news portal — all custom modules preserved, zero visual regressions.',
           'Investigated and remediated malware in compromised WordPress environments; implemented hardening to prevent reinfection.',
         ],
@@ -90,6 +99,7 @@ export default {
         role: 'Developer & IT Support',
         company: 'Gradeup',
         type: 'Educational Consultancy',
+        icon: 'education',
         start: 'Jun 2022',
         end: 'Jan 2024',
         bullets: [

@@ -4,28 +4,30 @@ import { useLocale } from '../composables/useLocale'
 
 const { t } = useLocale()
 
-// ── Message form state ───────────────────────────────────────────────────────
 const msgName    = ref('')
 const msgEmail   = ref('')
 const msgNeed    = ref('')
 const msgMessage = ref('')
-const msgSent    = ref(false)
+const msgState   = ref('idle') // idle | sending | sent | error
 
 async function sendMessage() {
   if (!msgName.value || !msgEmail.value || !msgMessage.value) return
+  msgState.value = 'sending'
   try {
-    await fetch('/api/contact/', {
+    const res = await fetch('/api/contact/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name: msgName.value,
-        email: msgEmail.value,
-        need: msgNeed.value,
+        name:    msgName.value,
+        email:   msgEmail.value,
+        need:    msgNeed.value,
         message: msgMessage.value,
       }),
     })
-  } catch {}
-  msgSent.value = true
+    msgState.value = res.ok ? 'sent' : 'error'
+  } catch {
+    msgState.value = 'error'
+  }
 }
 
 onMounted(() => {
@@ -60,8 +62,13 @@ onMounted(() => {
           <h2 class="col-heading">{{ t('contact.formTitle') }}</h2>
           <p class="col-sub">{{ t('contact.microcopy') }}</p>
 
-          <div v-if="msgSent" class="sent-msg">
+          <div v-if="msgState === 'sent'" class="sent-msg">
             {{ t('contact.form.success') }}
+          </div>
+
+          <div v-else-if="msgState === 'error'" class="error-msg">
+            {{ t('contact.form.error') }}
+            <button class="retry-btn" @click="msgState = 'idle'">Try again</button>
           </div>
 
           <form v-else class="msg-form" @submit.prevent="sendMessage">
@@ -92,7 +99,9 @@ onMounted(() => {
               ></textarea>
             </div>
 
-            <button type="submit" class="btn-ghost btn-full">{{ t('contact.form.submit') }}</button>
+            <button type="submit" class="btn-ghost btn-full" :disabled="msgState === 'sending'">
+              {{ msgState === 'sending' ? t('contact.form.sending') : t('contact.form.submit') }}
+            </button>
           </form>
         </div>
 
@@ -275,6 +284,36 @@ onMounted(() => {
   font-size: 0.875rem;
   color: #22c55e;
   text-align: center;
+}
+
+.error-msg {
+  padding: 20px;
+  background: rgba(239,68,68,0.06);
+  border: 1px solid rgba(239,68,68,0.18);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #f87171;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.retry-btn {
+  background: transparent;
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 6px;
+  color: #f87171;
+  font-size: 0.75rem;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.retry-btn:hover { background: rgba(239,68,68,0.08); }
+
+button[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

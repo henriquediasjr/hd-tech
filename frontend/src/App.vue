@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useLocale }      from './composables/useLocale'
 import HeroSection        from './sections/HeroSection.vue'
 import HowICanHelpSection from './sections/HowICanHelpSection.vue'
@@ -26,6 +26,20 @@ function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   navOpen.value = false
 }
+
+// After a locale change Vue re-renders content — some elements may lose
+// their `is-visible` class if they were re-created. After the next DOM
+// tick, re-apply `is-visible` to every [data-animate] element that is
+// currently intersecting the viewport.
+watch(locale, async () => {
+  await nextTick()
+  document.querySelectorAll('[data-animate]').forEach(el => {
+    const { top, bottom } = el.getBoundingClientRect()
+    if (top < window.innerHeight && bottom > 0) {
+      el.classList.add('is-visible')
+    }
+  })
+})
 
 const cleanups = []
 
@@ -70,7 +84,7 @@ onUnmounted(() => cleanups.forEach(fn => fn()))
     <header class="nav" :class="{ 'nav--scrolled': scrolled }">
       <div class="nav-inner">
         <button class="nav-logo" @click="scrollTo('hero')" aria-label="Home">
-          <span>HD</span>
+          <img src="/logo.png" alt="HD Tech" class="nav-logo-img" />
         </button>
 
         <nav class="nav-center">
@@ -130,15 +144,18 @@ onUnmounted(() => cleanups.forEach(fn => fn()))
       <ExperienceSection />
       <ProjectsSection />
       <SkillsSection />
-      <ContactSection />
       <EducationSection />
+      <ContactSection />
     </main>
 
     <!-- ── Footer ── -->
     <footer class="footer">
       <div class="footer-inner">
         <div class="footer-left">
-          <p class="footer-name">Henrique Dias · Backend Engineer · Curitiba, Brazil</p>
+          <div class="footer-brand">
+            <img src="/logo.png" alt="HD Tech" class="footer-logo" />
+            <p class="footer-name">Henrique Dias · Backend Engineer · Curitiba, Brazil</p>
+          </div>
           <div class="footer-socials">
             <a href="https://github.com/henriquediasjr" target="_blank" rel="noopener" class="social-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
@@ -317,26 +334,28 @@ body {
 }
 
 .nav-logo {
-  width: 28px;
-  height: 28px;
-  background: var(--accent);
+  width: 36px;
+  height: 36px;
+  background: transparent;
   border: none;
-  border-radius: 7px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: opacity 0.15s;
+  padding: 0;
+  overflow: hidden;
+  transition: opacity 0.15s, transform 0.15s;
 }
-.nav-logo span {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: -0.02em;
-  line-height: 1;
+.nav-logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  display: block;
+  object-fit: cover;
 }
-.nav-logo:hover { opacity: 0.85; }
+.nav-logo:hover { opacity: 0.85; transform: scale(1.04); }
 
 .nav-center {
   display: flex;
@@ -457,10 +476,25 @@ body {
   gap: 24px;
   flex-wrap: wrap;
 }
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.footer-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: block;
+  object-fit: cover;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
 .footer-name {
   font-size: 0.875rem;
   color: var(--muted);
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 .footer-socials {
   display: flex;

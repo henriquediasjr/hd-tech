@@ -16,7 +16,7 @@
       <div class="cert-section" data-animate style="--i:2">
         <p class="cert-heading">{{ t('education.certifications') }}</p>
         <ul class="cert-list">
-          <li v-for="cert in t('education.courses')" :key="cert.name">
+          <li v-for="(cert, ci) in t('education.courses')" :key="ci">
             {{ cert.name }} — {{ cert.issuer }}, {{ cert.year }}
           </li>
         </ul>
